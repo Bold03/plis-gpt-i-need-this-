@@ -1,0 +1,82 @@
+<Window x:Class="CopilotDashboard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="B737 AI Copilot" Height="560" Width="820"
+        MinHeight="480" MinWidth="720">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="B737 AI Copilot" FontSize="28" FontWeight="SemiBold"/>
+            <TextBlock Text="Local control console — Python policy layer + X-Plane bridge" Opacity="0.7" Margin="0,3,0,14"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Bridge" FontWeight="Bold"/>
+                    <TextBlock x:Name="BridgeStatusText" Text="Unknown"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Aircraft profile" FontWeight="Bold"/>
+                    <TextBlock x:Name="ProfileText" Text="—"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Flight phase" FontWeight="Bold"/>
+                    <TextBlock x:Name="PhaseText" Text="—"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3">
+                    <TextBlock Text="Confirmation" FontWeight="Bold"/>
+                    <TextBlock x:Name="PendingText" Text="None"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="Selected state" FontWeight="Bold" Margin="0,0,0,8"/>
+                    <TextBlock x:Name="StateText" TextWrapping="Wrap" FontFamily="Consolas"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" BorderThickness="1" CornerRadius="6" Padding="12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Activity" FontWeight="Bold" Margin="0,0,0,8"/>
+                    <TextBox x:Name="LogText" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="CommandText" Height="36" VerticalContentAlignment="Center"
+                     KeyDown="CommandText_KeyDown" ToolTip="Type Indonesian or English cockpit command"/>
+            <Button Grid.Column="1" Content="Send" Width="90" Margin="8,0,0,0" Click="Send_Click"/>
+            <Button Grid.Column="2" Content="Confirm" Width="90" Margin="8,0,0,0" Click="Confirm_Click"/>
+        </Grid>
+    </Grid>
+</Window>
