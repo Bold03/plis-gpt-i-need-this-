@@ -1,3 +1,11 @@
+#if IBM
+  #ifndef WIN32_LEAN_AND_MEAN
+    #define WIN32_LEAN_AND_MEAN
+  #endif
+  #include <winsock2.h>
+  #include <ws2tcpip.h>
+#endif
+
 #include "XPLMDataAccess.h"
 #include "XPLMPlugin.h"
 #include "XPLMProcessing.h"
@@ -15,9 +23,6 @@
 #include <vector>
 
 #if IBM
-  #define WIN32_LEAN_AND_MEAN
-  #include <winsock2.h>
-  #include <ws2tcpip.h>
   using socket_t = SOCKET;
   constexpr socket_t INVALID_SOCKET_VALUE = INVALID_SOCKET;
 #else
@@ -160,11 +165,6 @@ void sendError(const std::string& reason) {
 
 bool tokenValid(const std::vector<std::string>& fields, std::size_t tokenIndex = 1) {
     return fields.size() > tokenIndex && fields[tokenIndex] == g_token;
-}
-
-double nowSeconds() {
-    using namespace std::chrono;
-    return duration<double>(steady_clock::now().time_since_epoch()).count();
 }
 
 long long unixMillis() {
