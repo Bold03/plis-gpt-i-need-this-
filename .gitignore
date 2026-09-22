@@ -1,0 +1,9 @@
+**/__pycache__/
+**/.pytest_cache/
+**/.venv/
+build/
+*.pyc
+*.pyo
+*.user
+*.suo
+copilot.local.json

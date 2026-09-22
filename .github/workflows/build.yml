@@ -1,0 +1,85 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: python/pyproject.toml
+      - name: Install Python package
+        working-directory: python
+        run: python -m pip install -e '.[dev]'
+      - name: Run tests
+        working-directory: python
+        run: pytest -q
+      - name: Validate aircraft profiles
+        run: |
+          python tools/validate_profile.py config/zibo_b738.json
+          python tools/validate_profile.py config/levelup_b737.json
+
+  linux-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download X-Plane SDK 4.3.0
+        run: |
+          curl -fL --retry 3 -o XPSDK430.zip https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sdk_zip_files/XPSDK430.zip
+          unzip -q XPSDK430.zip -d .xplane-sdk
+          test -f .xplane-sdk/SDK/CHeaders/XPLM/XPLMPlugin.h
+      - name: Build Linux X-Plane plugin
+        run: |
+          cmake -S cpp_bridge -B build/cpp -DXPLANE_SDK="$PWD/.xplane-sdk/SDK" -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/cpp --parallel
+          test -f build/cpp/lin.xpl
+      - name: Package Linux plugin
+        run: python scripts/package_plugin.py --build-dir build/cpp --dest dist/B737AICopilot
+      - uses: actions/upload-artifact@v4
+        with:
+          name: B737AICopilot-linux-xpl
+          path: dist/B737AICopilot
+          if-no-files-found: error
+
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download X-Plane SDK 4.3.0
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri 'https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sdk_zip_files/XPSDK430.zip' -OutFile XPSDK430.zip
+          Expand-Archive -Path XPSDK430.zip -DestinationPath .xplane-sdk -Force
+          if (-not (Test-Path '.xplane-sdk/SDK/CHeaders/XPLM/XPLMPlugin.h')) { throw 'SDK extraction failed' }
+      - name: Build Windows X-Plane plugin
+        shell: pwsh
+        run: |
+          cmake -S cpp_bridge -B build/cpp -DXPLANE_SDK="$pwd/.xplane-sdk/SDK" -A x64
+          cmake --build build/cpp --config Release
+          if (-not (Test-Path 'build/cpp/Release/win.xpl')) { throw 'win.xpl was not produced' }
+      - name: Package Windows plugin
+        run: python scripts/package_plugin.py --build-dir build/cpp --dest dist/B737AICopilot
+      - name: Build WPF dashboard
+        working-directory: csharp/CopilotDashboard
+        run: dotnet build -c Release
+      - name: Publish WPF dashboard
+        working-directory: csharp/CopilotDashboard
+        run: dotnet publish -c Release -r win-x64 --self-contained false -o ../../dist/CopilotDashboard
+      - uses: actions/upload-artifact@v4
+        with:
+          name: B737AICopilot-windows
+          path: |
+            dist/B737AICopilot
+            dist/CopilotDashboard
+          if-no-files-found: error
