@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "b737-ai-copilot"
+version = "0.1.0"
+description = "Bilingual AI copilot service for Boeing 737 add-ons in X-Plane 12"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "pydantic>=2.8"
+]
+
+[project.optional-dependencies]
+voice = [
+  "faster-whisper>=1.0",
+  "sounddevice>=0.5",
+  "numpy>=1.26",
+  "pyttsx3>=2.90"
+]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+b737-copilot = "copilot.main:entrypoint"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["copilot*"]
