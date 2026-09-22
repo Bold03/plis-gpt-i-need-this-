@@ -1,0 +1,38 @@
+{
+  "id": "zibo_b738",
+  "display_name": "Zibo Mod Boeing 737-800",
+  "match": {
+    "icao": ["B738"],
+    "description_contains": ["Zibo", "737-800X"]
+  },
+  "bridge": {
+    "allowed_command_prefixes": ["laminar/B738/", "sim/"],
+    "allowed_dataref_prefixes": ["laminar/B738/", "sim/"]
+  },
+  "subscriptions": {
+    "on_ground": "sim/flightmodel/failures/onground_any",
+    "ground_speed_mps": "sim/flightmodel/position/groundspeed",
+    "radio_alt_ft": "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot",
+    "altitude_ft": "sim/cockpit2/gauges/indicators/altitude_ft_pilot",
+    "ias_kts": "sim/cockpit2/gauges/indicators/airspeed_kts_pilot",
+    "vertical_speed_fpm": "sim/cockpit2/gauges/indicators/vvi_fpm_pilot",
+    "parking_brake": "sim/cockpit2/controls/parking_brake_ratio",
+    "gear_handle": "sim/cockpit2/controls/gear_handle_down",
+    "flap_ratio": "sim/cockpit2/controls/flap_ratio",
+    "battery_pos": "sim/cockpit2/electrical/battery_on[0]",
+    "autobrake_pos": "laminar/B738/autobrake/autobrake_pos",
+    "irs_left": "laminar/B738/toggle_switch/irs_left",
+    "irs_right": "laminar/B738/toggle_switch/irs_right"
+  },
+  "actions": {
+    "battery_on": {"type": "command", "name": "laminar/B738/switch/battery_dn"},
+    "battery_off": {"type": "command", "name": "laminar/B738/switch/battery_up"},
+    "autobrake_increase": {"type": "command", "name": "laminar/B738/knob/autobrake_up"},
+    "autobrake_decrease": {"type": "command", "name": "laminar/B738/knob/autobrake_dn"},
+    "gear_up": {"type": "command", "name": "sim/flight_controls/landing_gear_up"},
+    "gear_down": {"type": "command", "name": "sim/flight_controls/landing_gear_down"},
+    "flaps_up": {"type": "command", "name": "sim/flight_controls/flaps_up"},
+    "flaps_down": {"type": "command", "name": "sim/flight_controls/flaps_down"},
+    "parking_brake_toggle": {"type": "command", "name": "sim/flight_controls/brakes_toggle_max"}
+  }
+}

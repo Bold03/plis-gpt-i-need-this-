@@ -1,0 +1,35 @@
+{
+  "id": "levelup_b737",
+  "display_name": "LevelUp 737 NG Series (starter profile)",
+  "match": {
+    "icao": ["B736", "B737", "B738", "B739"],
+    "description_contains": ["LevelUp", "737NG"]
+  },
+  "bridge": {
+    "allowed_command_prefixes": ["sim/"],
+    "allowed_dataref_prefixes": ["sim/"]
+  },
+  "subscriptions": {
+    "on_ground": "sim/flightmodel/failures/onground_any",
+    "ground_speed_mps": "sim/flightmodel/position/groundspeed",
+    "radio_alt_ft": "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot",
+    "altitude_ft": "sim/cockpit2/gauges/indicators/altitude_ft_pilot",
+    "ias_kts": "sim/cockpit2/gauges/indicators/airspeed_kts_pilot",
+    "vertical_speed_fpm": "sim/cockpit2/gauges/indicators/vvi_fpm_pilot",
+    "parking_brake": "sim/cockpit2/controls/parking_brake_ratio",
+    "gear_handle": "sim/cockpit2/controls/gear_handle_down",
+    "flap_ratio": "sim/cockpit2/controls/flap_ratio",
+    "battery_pos": "sim/cockpit2/electrical/battery_on[0]"
+  },
+  "actions": {
+    "gear_up": {"type": "command", "name": "sim/flight_controls/landing_gear_up"},
+    "gear_down": {"type": "command", "name": "sim/flight_controls/landing_gear_down"},
+    "flaps_up": {"type": "command", "name": "sim/flight_controls/flaps_up"},
+    "flaps_down": {"type": "command", "name": "sim/flight_controls/flaps_down"},
+    "parking_brake_toggle": {"type": "command", "name": "sim/flight_controls/brakes_toggle_max"}
+  },
+  "notes": [
+    "Add LevelUp-specific command/dataref namespaces after discovering them in the exact installed aircraft version.",
+    "Do not copy Zibo laminar/B738 mappings into LevelUp unless they are verified in-sim."
+  ]
+}

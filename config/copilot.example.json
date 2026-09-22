@@ -1,0 +1,18 @@
+{
+  "language": "auto",
+  "assistant_name": "Copilot",
+  "automation_mode": "confirm_critical",
+  "bridge_host": "127.0.0.1",
+  "bridge_port": 49075,
+  "http_host": "127.0.0.1",
+  "http_port": 8765,
+  "session_token": "CHANGE_ME_TO_A_LONG_RANDOM_TOKEN",
+  "voice": {
+    "enabled": false,
+    "stt_model": "small",
+    "stt_device": "auto",
+    "tts_backend": "system",
+    "indonesian_voice_hint": "id",
+    "english_voice_hint": "en"
+  }
+}
